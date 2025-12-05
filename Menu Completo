@@ -1,0 +1,314 @@
+/*
+Objetivo
+Implementar e testar os principais algoritmos clássicos de grafos estudados na disciplina,
+demonstrando domínio conceitual e prático sobre suas aplicações.
+
+Descrição Geral
+Cada grupo deverá desenvolver um Sistema de Análise de Grafos, capaz de:
+Representar o grafo
+    • A partir de lista de arestas, lista de adjacência ou matriz de adjacência.
+    • O grafo deve ser ponderado e não direcionado.
+
+Executar os seguintes algoritmos:
+    • Travessia em Profundidade (DFS)
+    • Travessia em Amplitude (BFS)
+    • Dijkstra – menor caminho entre dois vértices
+    • Prim ou Kruskal – árvore geradora mínima
+
+Relatório Técnico (entregue junto com o código)
+O grupo deverá elaborar um relatório em PDF contendo:
+    Capa: título do trabalho, nomes dos integrantes, turma e data.
+    Introdução: breve descrição do que foi implementado e objetivos.
+    Descrição dos algoritmos: resumo teórico e função de cada algoritmo.
+    Explicação dos principais trechos de código (em linguagem natural, com comentários
+    curtos).
+
+Execução prática:
+o Capturas de tela (prints) mostrando cada algoritmo em execução.
+o Indicação clara dos resultados obtidos.
+Conclusão: principais aprendizados e dificuldades encontradas.
+*/
+using System;
+using System.Diagnostics;
+class Program
+{
+    static void Main(string[] args)
+    {
+        OperacoesGrafos operacoes = new();
+        Menu Inicializador = new();
+
+        Inicializador.MenuPrincipal(operacoes);
+    }
+}
+class Menu
+{
+    public void MenuPrincipal(OperacoesGrafos operacoes) // Menu que controla o fluxo do programa entre criar grafos e usar algoritmos
+    {
+        int opcao = 0;
+
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine("          nome sistema         ");
+            Console.WriteLine("===============================");
+            Console.WriteLine("    1 - Manipular Grafos       ");
+            Console.WriteLine("    2 - Ultilizar Algoritmos   ");
+            Console.WriteLine("    3 - Finalizar programa     ");
+            Console.WriteLine("===============================\n");
+            Console.Write(" - ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao)) // Filtro para receber apenas int
+                switch (opcao)
+                {
+                    case 1://DONE
+                        MenuGrafos(operacoes);
+                        break;
+                    case 2:
+                        MenuAlgoritmos(operacoes);
+                        break;
+                    case 3:
+                        MensagemAnimada("\nFinalizando programa", 500);
+                        break;
+                    default:
+                        MensagemAnimada("Opção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("Opção inválida");
+
+        } while (opcao != 3);
+    }
+    public void MenuGrafos(OperacoesGrafos operacoes) // Menu para realizar o CRUD com grafos
+    {
+        int opcao = 0;
+
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine("     Manipulação de Grafos     ");
+            Console.WriteLine("===============================\n");
+            Console.WriteLine("    1 - Criar Grafos           ");
+            Console.WriteLine("    2 - Apagar Grafos          ");
+            Console.WriteLine("    3 - Listar Grafos          ");
+            Console.WriteLine("    4 - Voltar\n               ");
+            Console.Write(" - ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1://DONE
+                        MenuCriarGrafo(operacoes);
+                        break;
+                    case 2://DONE
+                        MenuApagarGrafo(operacoes);
+                        break;
+                    case 3://DONE
+                        operacoes.ListarGrafos();
+                        break;
+                    case 4:
+                        MensagemAnimada("voltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("Opção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("Opção inválida");
+        } while (opcao != 4);
+    }
+    public void MenuCriarGrafo(OperacoesGrafos operacoes) // Menu para inserção de grafos
+    {
+        int opcao = 0;
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("       Criação de Grafos       ");
+            Console.WriteLine("-------------------------------\n");
+            Console.WriteLine("    1 - Digitar");
+            Console.WriteLine("    2 - Inserir arquivo");
+            Console.WriteLine("    3 - Voltar\n");
+            Console.Write("   ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        operacoes.LerGrafo();
+                        break;
+                    case 2:
+                        operacoes.LerGrafoArquivo();
+                        break;
+                    case 3:
+                        MensagemAnimada("voltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("Opção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("Opção inválida");
+
+        } while (opcao != 3);
+    }
+    public void MenuApagarGrafo(OperacoesGrafos operacoes) // Menu para remoção de grafos
+    {
+        int opcao = 0;
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("       Remoção de Grafos       ");
+            Console.WriteLine("-------------------------------\n");
+            Console.WriteLine("    1 - Apagar grafo");
+            Console.WriteLine("    2 - Apagar todos");
+            Console.WriteLine("    3 - Voltar");
+            Console.Write(" - ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        operacoes.ApagarGrafo();
+                        break;
+                    case 2:
+                        operacoes.LimparGrafos();
+                        break;
+                    case 3:
+                        MensagemAnimada("voltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("Opção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("Opção inválida");
+        } while (opcao != 3);
+    }
+    public void MenuAlgoritmos(OperacoesGrafos operacoes) // Menu para aplicação de algoritmos em grafos
+    {
+        int opcao = 0;
+
+        do
+        {
+            Console.Clear();
+
+            int grafoNum = operacoes.ListarGrafos();
+
+            Console.WriteLine("    Algoritmos :               ");
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("    1 - DFS                    ");
+            Console.WriteLine("    2 - BFS                    ");
+            Console.WriteLine("    3 - Dijkstra               ");
+            Console.WriteLine("    4 - Prim                   ");
+            Console.WriteLine("    5 - Kruskal                ");
+            Console.WriteLine("    6 - Voltar                 ");
+            Console.Write(" - ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        operacoes.DFS(grafoNum);
+                        break;
+                    case 2:
+                        operacoes.BFS(grafoNum);
+                        break;
+                    case 3:
+                        operacoes.Dijkstra(grafoNum);
+                        break;
+                    case 4:
+                        operacoes.Prim(grafoNum);
+                        break;
+                    case 5:
+                        operacoes.Kruskal(grafoNum);
+                        break;
+                    case 6:
+                        MensagemAnimada("voltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("Opção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("Opção inválida");
+        } while (opcao != 6);
+    }
+    private void MensagemAnimada(string Mensagem, int tempo = 400, int pontos = 4) 
+    {
+        Console.Write(Mensagem);
+        for (int i = 0; i < pontos; i++)
+        {
+            Thread.Sleep(tempo);
+            Console.Write(".");
+        }
+        Console.WriteLine("");
+    }
+}
+
+class OperacoesGrafos
+{
+    public List<int[,]> ListaGrafos = new();
+    public OperacoesGrafos()
+    {
+        // Inicia arquivo database
+    }
+    public void InserirGrafo()
+    {
+        Console.Clear();
+
+    }
+    public void UltilizarAlgoritmos()
+    {
+
+    }
+    public int ListarGrafos(int GrafosPorPag = 5)
+    {
+        // Mostrar pags e opção de algoritmo para ser focado
+        return 0; // Retorna o grafo focado
+    }
+    public void ApagarGrafo()
+    {
+
+    }
+    public void LimparGrafos()
+    {
+
+    }
+    public void LerGrafo() { }
+    public void LerGrafoArquivo() { }
+    /*
+                ALGORITMOS DO TRABALHO ABAIXO  
+
+                "GrafoNum" é o numero do algoritmo em "ListaGrafos" pode ser removido de varios jeitos como:   
+                
+                int[,]Matriz = ListaGrafos[GrafoNum] 
+    */
+
+    public void DFS(int GrafoNum)
+    {
+
+    }
+    public void BFS(int GrafoNum)
+    {
+
+    }
+    public void Dijkstra(int GrafoNum)
+    {
+
+    }
+    public void Prim(int GrafoNum)
+    {
+
+    }
+    public void Kruskal(int GrafoNum)
+    {
+
+    }
+}
