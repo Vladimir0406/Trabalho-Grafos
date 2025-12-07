@@ -780,8 +780,9 @@ class OperacoesGrafos
         bool[] visited = new bool[numV];
 
     p.Push(0);  // Adiciona vértice inicial
-    Console.WriteLine("\n=== DFS - Busca em Profundidade ===");
-
+    Console.WriteLine("\nDFS - Busca em Profundidade");
+    Console.WriteLine("Ordem de visitação:");
+    
     while (p.Count > 0)
     {
         int atual = p.Pop();  // Remove da pilha
@@ -789,8 +790,7 @@ class OperacoesGrafos
         if (!visited[atual])  
         {
             visited[atual] = true;  // Marca como visitado
-            Console.WriteLine($"Visitando vértice {atual}");
-            Console.Write($"{atual} "); 
+            Console.WriteLine($" → {atual} "); 
 
             for (int j = 0; j < numV; j++)
             {
@@ -802,7 +802,7 @@ class OperacoesGrafos
         }
     }
 
-    Console.WriteLine("\n===============================");
+
     Console.WriteLine("Pressione qualquer tecla para voltar...");
     Console.ReadKey();
     }
