@@ -779,33 +779,32 @@ class OperacoesGrafos
        
         bool[] visited = new bool[numV];
 
-    p.Push(0);  // Adiciona vértice inicial
-    Console.WriteLine("\n=== DFS - Busca em Profundidade ===");
+        p.Push(0);  // Adiciona vértice inicial
+        Console.WriteLine("\n=== DFS - Busca em Profundidade ===");
 
-    while (p.Count > 0)
-    {
-        int atual = p.Pop();  // Remove da pilha
-        
-        if (!visited[atual])  
+        while (p.Count > 0)
         {
-            visited[atual] = true;  // Marca como visitado
-            Console.WriteLine($"Visitando vértice {atual}");
-            Console.Write($"{atual} "); 
-
-            for (int j = 0; j < numV; j++)
+            int atual = p.Pop();  // Remove da pilha
+            
+            if (!visited[atual])  
             {
-                if (g[atual, j] != 0 && !visited[j])
+                visited[atual] = true;  // Marca como visitado
+                Console.Write($"{atual} "); 
+
+                for (int j = 0; j < numV; j++)
                 {
-                    p.Push(j);
+                    if (g[atual, j] != 0 && !visited[j])
+                    {
+                        p.Push(j);
+                    }
                 }
             }
         }
-    }
 
-    Console.WriteLine("\n===============================");
-    Console.WriteLine("Pressione qualquer tecla para voltar...");
-    Console.ReadKey();
-    }
+        Console.WriteLine("\n===============================");
+        Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
+        }
     public void BFS(int GrafoNum)
     {
             
