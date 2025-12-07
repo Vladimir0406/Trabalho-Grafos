@@ -1,0 +1,259 @@
+public int GetPeso(int origem, int destino)
+    {
+        return MatrizAdjacencia[origem, destino];
+    }
+
+    public List<int> GetVizinhos(int vertice)
+    {
+        List<int> vizinhos = new List<int>();
+        for (int i = 0; i < NumVertices; i++)
+        {
+            if (MatrizAdjacencia[vertice, i] > 0)
+            {
+                vizinhos.Add(i);
+            }
+        }
+        return vizinhos;
+    }
+
+public void Prim(int grafoNum)
+    {
+        if (grafoNum < 0 || grafoNum >= grafos.Count)
+        {
+            Console.WriteLine("Índice de grafo inválido.");
+            Console.ReadKey();
+            return;
+        }
+
+        Grafo grafo = grafos[grafoNum];
+        Console.Clear();
+        Console.WriteLine($"======== ALGORITMO DE PRIM - {grafo.Nome} ========");
+        
+        Console.Write("Vértice inicial para MST (0 a {0}): ", grafo.NumVertices - 1);
+        if (!int.TryParse(Console.ReadLine(), out int inicio) || inicio < 0 || inicio >= grafo.NumVertices)
+        {
+            Console.WriteLine("Vértice inválido!");
+            Console.ReadKey();
+            return;
+        }
+
+        int n = grafo.NumVertices;
+        int[] pai = new int[n];
+        int[] key = new int[n];
+        bool[] inMST = new bool[n];
+        
+        for (int i = 0; i < n; i++)
+        {
+            key[i] = int.MaxValue;
+            inMST[i] = false;
+        }
+        
+        key[inicio] = 0;
+        pai[inicio] = -1;
+        
+        // Executar Prim
+        for (int count = 0; count < n - 1; count++)
+        {
+            // Encontrar vértice com key mínima que não está na MST
+            int u = -1;
+            int minKey = int.MaxValue;
+            
+            for (int v = 0; v < n; v++)
+            {
+                if (!inMST[v] && key[v] < minKey)
+                {
+                    minKey = key[v];
+                    u = v;
+                }
+            }
+            
+            if (u == -1) break;
+            
+            inMST[u] = true;
+            
+            // Atualizar keys dos vértices adjacentes
+            foreach (int v in grafo.GetVizinhos(u))
+            {
+                int peso = grafo.GetPeso(u, v);
+                
+                if (!inMST[v] && peso < key[v])
+                {
+                    pai[v] = u;
+                    key[v] = peso;
+                }
+            }
+        }
+        
+        // Exibir MST
+        Console.WriteLine("\n======== ÁRVORE GERADORA MÍNIMA (PRIM) ========");
+        Console.WriteLine("Arestas da MST:");
+        
+        int pesoTotal = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (i != inicio && pai[i] != -1)
+            {
+                int peso = grafo.GetPeso(i, pai[i]);
+                pesoTotal += peso;
+                Console.WriteLine($"  {pai[i]} -- {i} : {peso}");
+            }
+        }
+        
+        Console.WriteLine($"\nPeso total da MST: {pesoTotal}");
+        
+        // Verificar se o grafo é conexo
+        bool conexo = true;
+        for (int i = 0; i < n; i++)
+        {
+            if (i != inicio && pai[i] == -1)
+            {
+                Console.WriteLine($"\nAtenção: Vértice {i} não foi conectado à MST.");
+                Console.WriteLine("O grafo pode não ser conexo.");
+                conexo = false;
+                break;
+            }
+        }
+        
+        if (conexo)
+        {
+            Console.WriteLine("\nO grafo é conexo e a MST inclui todos os vértices.");
+        }
+        
+        Console.WriteLine("\nPressione qualquer tecla para continuar...");
+        Console.ReadKey();
+    }
+ public void Dijkstra(int grafoNum)
+    {
+        if (grafoNum < 0 || grafoNum >= grafos.Count)
+        {
+            Console.WriteLine("Índice de grafo inválido.");
+            Console.ReadKey();
+            return;
+        }
+
+        Grafo grafo = grafos[grafoNum];
+        Console.Clear();
+        Console.WriteLine($"======== DIJKSTRA - {grafo.Nome} ========");
+        
+        Console.Write("Vértice de origem (0 a {0}): ", grafo.NumVertices - 1);
+        if (!int.TryParse(Console.ReadLine(), out int origem) || origem < 0 || origem >= grafo.NumVertices)
+        {
+            Console.WriteLine("Vértice inválido!");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.Write("Vértice de destino (0 a {0}): ", grafo.NumVertices - 1);
+        if (!int.TryParse(Console.ReadLine(), out int destino) || destino < 0 || destino >= grafo.NumVertices)
+        {
+            Console.WriteLine("Vértice inválido!");
+            Console.ReadKey();
+            return;
+        }
+
+        // Inicialização
+        int n = grafo.NumVertices;
+        int[] distancia = new int[n];
+        bool[] visitado = new bool[n];
+        int[] predecessor = new int[n];
+        
+        for (int i = 0; i < n; i++)
+        {
+            distancia[i] = int.MaxValue;
+            predecessor[i] = -1;
+            visitado[i] = false;
+        }
+        
+        distancia[origem] = 0;
+        
+        // Executar Dijkstra
+        for (int count = 0; count < n - 1; count++)
+        {
+            // Encontrar vértice não visitado com menor distância
+            int u = -1;
+            int minDistancia = int.MaxValue;
+            
+            for (int v = 0; v < n; v++)
+            {
+                if (!visitado[v] && distancia[v] < minDistancia)
+                {
+                    minDistancia = distancia[v];
+                    u = v;
+                }
+            }
+            
+            if (u == -1 || minDistancia == int.MaxValue)
+                break;
+            
+            visitado[u] = true;
+            
+            // Atualizar distâncias dos vizinhos
+            foreach (int v in grafo.GetVizinhos(u))
+            {
+                int peso = grafo.GetPeso(u, v);
+                
+                if (!visitado[v] && distancia[u] != int.MaxValue && 
+                    distancia[u] + peso < distancia[v])
+                {
+                    distancia[v] = distancia[u] + peso;
+                    predecessor[v] = u;
+                }
+            }
+        }
+        
+        // Exibir resultados
+        Console.WriteLine("\n======== RESULTADOS DIJKSTRA ========");
+        Console.WriteLine($"Origem: {origem} → Destino: {destino}");
+        
+        if (distancia[destino] == int.MaxValue)
+        {
+            Console.WriteLine($"\nNão existe caminho de {origem} para {destino}.");
+        }
+        else
+        {
+            Console.WriteLine($"\nDistância mínima: {distancia[destino]}");
+            
+            // Reconstruir caminho
+            List<int> caminho = new List<int>();
+            int atual = destino;
+            
+            while (atual != -1)
+            {
+                caminho.Add(atual);
+                atual = predecessor[atual];
+            }
+            
+            caminho.Reverse();
+            
+            Console.Write("Caminho mínimo: ");
+            for (int i = 0; i < caminho.Count; i++)
+            {
+                Console.Write(caminho[i]);
+                if (i < caminho.Count - 1)
+                    Console.Write(" → ");
+            }
+            
+            Console.WriteLine("\n\nDetalhes do caminho:");
+            int distanciaTotal = 0;
+            for (int i = 0; i < caminho.Count - 1; i++)
+            {
+                int u = caminho[i];
+                int v = caminho[i + 1];
+                int peso = grafo.GetPeso(u, v);
+                distanciaTotal += peso;
+                Console.WriteLine($"  {u} → {v} : {peso} (acumulado: {distanciaTotal})");
+            }
+        }
+        
+        Console.WriteLine("\nDistâncias da origem para todos os vértices:");
+        for (int i = 0; i < n; i++)
+        {
+            if (distancia[i] == int.MaxValue)
+                Console.WriteLine($"  Vértice {i}: ∞ (inalcançável)");
+            else
+                Console.WriteLine($"  Vértice {i}: {distancia[i]} (predecessor: {predecessor[i]})");
+        }
+        
+        Console.WriteLine("\nPressione qualquer tecla para continuar...");
+        Console.ReadKey();
+    }
