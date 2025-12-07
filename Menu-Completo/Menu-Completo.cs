@@ -1,33 +1,3 @@
-/*
-Objetivo
-Implementar e testar os principais algoritmos clássicos de grafos estudados na disciplina,
-demonstrando domínio conceitual e prático sobre suas aplicações.
-
-Descrição Geral
-Cada grupo deverá desenvolver um Sistema de Análise de Grafos, capaz de:
-Representar o grafo
-    • A partir de lista de arestas, lista de adjacência ou matriz de adjacência.
-    • O grafo deve ser ponderado e não direcionado.
-
-Executar os seguintes algoritmos:
-    • Travessia em Profundidade (DFS)
-    • Travessia em Amplitude (BFS)
-    • Dijkstra – menor caminho entre dois vértices
-    • Prim ou Kruskal – árvore geradora mínima
-
-Relatório Técnico (entregue junto com o código)
-O grupo deverá elaborar um relatório em PDF contendo:
-    Capa: título do trabalho, nomes dos integrantes, turma e data.
-    Introdução: breve descrição do que foi implementado e objetivos.
-    Descrição dos algoritmos: resumo teórico e função de cada algoritmo.
-    Explicação dos principais trechos de código (em linguagem natural, com comentários
-    curtos).
-
-Execução prática:
-o Capturas de tela (prints) mostrando cada algoritmo em execução.
-o Indicação clara dos resultados obtidos.
-Conclusão: principais aprendizados e dificuldades encontradas.
-*/
 using System;
 using System.Diagnostics;
 using System.Net.WebSockets;
@@ -40,23 +10,24 @@ class Program
     {
         OperacoesGrafos operacoes = new();
 
+
         int[,] grafo = { { 0, 1 }, { 1, 0 } };
         int[,] grafo2 = { { 0, 7 }, { 7, 0 } };
         int[,] grafo3 = { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } };
+        int[,] grafo4 = { { 0, 1, 1, 0, 0 }, { 1, 0, 0, 1, 0 }, { 1, 0, 0, 0, 1 }, { 0, 1, 0, 0, 0 }, { 0, 0, 1, 0, 0 } };
+        int[,] grafo5 = { { 0, 2, 0, 0, 6 }, { 2, 0, 3, 0, 0 }, { 0, 3, 0, 1, 0 }, { 0, 0, 1, 0, 4 }, { 6, 0, 0, 4, 0 } };
+        int[,] grafo6 = { { 0, 4, 0, 0, 0, 0 }, { 4, 0, 8, 0, 0, 0 }, { 0, 8, 0, 7, 0, 4 }, { 0, 0, 7, 0, 9, 14 }, { 0, 0, 0, 9, 0, 10 }, { 0, 0, 4, 14, 10, 0 } };
+        int[,] grafo7 = { { 0, 1, 0, 4 }, { 1, 0, 2, 0 }, { 0, 2, 0, 3 }, { 4, 0, 3, 0 } };
+        int[,] grafo8 = { { 0, 1, 3 }, { 1, 0, 2 }, { 3, 2, 0 } };
 
         operacoes.ListaGrafos.Add(grafo);
         operacoes.ListaGrafos.Add(grafo2);
         operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo3);
-        operacoes.ListaGrafos.Add(grafo2);
-        operacoes.ListaGrafos.Add(grafo2);
-        operacoes.ListaGrafos.Add(grafo2);
+        operacoes.ListaGrafos.Add(grafo4);
+        operacoes.ListaGrafos.Add(grafo5);
+        operacoes.ListaGrafos.Add(grafo6);
+        operacoes.ListaGrafos.Add(grafo7);
+        operacoes.ListaGrafos.Add(grafo8);
 
         Menu Inicializador = new();
 
@@ -156,8 +127,7 @@ class Menu
             Console.WriteLine($"      Criação de Grafos ({operacoes.ListaGrafos.Count})");
             Console.WriteLine("===============================\n");
             Console.WriteLine("    1 - Digitar                ");
-            Console.WriteLine("    2 - Inserir arquivo        ");
-            Console.WriteLine("    3 - Voltar\n               ");
+            Console.WriteLine("    2 - Voltar\n               ");
             Console.WriteLine("===============================\n");
             Console.Write("   ");
 
@@ -166,16 +136,8 @@ class Menu
                 {
                     case 1:
                         operacoes.LerGrafo();
-                        /*Console.WriteLine("   Inserir outro grafo?");
-                        Console.WriteLine("     (Enter para confirmar)");
-                        Console.WriteLine("     (Qualquer tecla para cancelar)");
-                    */
-
                         break;
                     case 2:
-                        operacoes.LerGrafoArquivo();
-                        break;
-                    case 3:
                         MensagemAnimada("\nvoltando.", 250);
                         break;
                     default:
@@ -185,7 +147,7 @@ class Menu
             else
                 MensagemAnimada("\nOpção inválida");
 
-        } while (opcao != 3);
+        } while (opcao != 2);
     }
     public void MenuApagarGrafo(OperacoesGrafos operacoes) // Menu para remoção de grafos
     {
@@ -232,7 +194,7 @@ class Menu
     }
     public void MenuAlgoritmos(OperacoesGrafos operacoes) // Menu para aplicação de algoritmos em grafos
     {
-        if (operacoes.ListaGrafos.Count <= 0)
+        if (operacoes.ListaGrafos.Count <= 0) // Verifica se há grafos antes da execução do código
         {
             Console.WriteLine("\nNão há grafos para aplicar algoritmos.");
             Console.ReadKey(true);
@@ -243,8 +205,6 @@ class Menu
 
             while (true)
             {
-
-
                 Console.Clear();
 
                 int grafoNum = operacoes.EscolherGrafo();
@@ -257,7 +217,7 @@ class Menu
                 Console.WriteLine("===============================");
                 Console.WriteLine("    Aplicação de Algoritmos    ");
                 Console.WriteLine("===============================");
-                Console.WriteLine($" Grafo {grafoNum} :");
+                Console.WriteLine($" Grafo {grafoNum + 1} :");
 
                 operacoes.ListarGrafo(grafoNum);
 
@@ -268,7 +228,8 @@ class Menu
                 Console.WriteLine("    3 - Dijkstra               ");
                 Console.WriteLine("    4 - Prim                   ");
                 Console.WriteLine("    5 - Kruskal                ");
-                Console.WriteLine("    6 - Voltar\n               ");
+                Console.WriteLine("    6 - Voltar                 ");
+                Console.WriteLine("===============================\n");
                 Console.Write("   ");
 
                 if (int.TryParse(Console.ReadLine(), out opcao))
@@ -290,7 +251,6 @@ class Menu
                             operacoes.Kruskal(grafoNum);
                             break;
                         case 6:
-                            MensagemAnimada("\nvoltando.", 200);
                             break;
                         default:
                             MensagemAnimada("\nOpção inexistente");
@@ -312,14 +272,9 @@ class Menu
         Console.WriteLine("");
     }
 }
-
 class OperacoesGrafos
 {
     public List<int[,]> ListaGrafos = new();
-    public OperacoesGrafos()
-    {
-        // Inicia arquivo database
-    }
     public void LerGrafo()
     {
         int[,] grafo;
@@ -333,6 +288,7 @@ class OperacoesGrafos
                 Console.WriteLine("===============================");
                 Console.WriteLine("       Leitura de Grafos       ");
                 Console.WriteLine("===============================\n");
+
                 Console.Write("Número de vértices : ");
 
                 if (!(int.TryParse(Console.ReadLine(), out int n) || n <= 0)) // Verifica se o vértice é inválido
@@ -340,11 +296,7 @@ class OperacoesGrafos
 
                 grafo = new int[n, n];
 
-                Console.Write("E = ");
-
-                string arestas = Console.ReadLine();
-
-                InserirArestas(arestas, grafo);
+                LerArestas(grafo);
 
                 ListaGrafos.Add(grafo);
 
@@ -366,133 +318,39 @@ class OperacoesGrafos
             break;
         }
     }
-    public void InserirArestas(string arestas, int[,] grafo)
+    public void LerArestas(int[,] matriz) // Lê cada dado para uma parte do grafo
     {
-        int resultado = ValidaArestas(arestas);
-        bool ponderado = false;
-        arestas = arestas.Trim();
+        int n = matriz.GetLength(0);
 
-        if (resultado != 1 || resultado != 0)
-            throw new Exception("\nArestas inválidas");
+        Console.WriteLine("O grafo é ponderado? (S/N)");
+        string opcao = Console.ReadLine().ToUpper();
+        bool ponderado = opcao == "S";
 
-        else if (resultado == 0)
-            ponderado = false;
+        Console.WriteLine("Quantas arestas deseja inserir?");
+        int numArestas = int.Parse(Console.ReadLine());
 
-        else if (resultado == 1)
-            ponderado = true;
-
-        // Faz os vérctices da aresta começarem em 0
-        if (!arestas.Contains('0') && arestas.Any(char.IsDigit)) // Verificação se os vertices NÃO então começando no zero
+        for (int i = 0; i < numArestas; i++)
         {
-            string arestaCopia = "";
+            Console.WriteLine($"Aresta {i + 1}:");
+
+            Console.Write("Vértice 1: ");
+            int v1 = int.Parse(Console.ReadLine());
+
+            Console.Write("Vértice 2: ");
+            int v2 = int.Parse(Console.ReadLine());
+
+            int peso = 1; // padrão se não ponderado
 
             if (ponderado)
             {
-                // arestas = Regex.Replace(arestas, @"(?<=\(|,)([0-9]+)")
-                // Cria uma cópia das arestas com os vértices começando no zero
-                for (int i = 0; i < arestas.Length; i++)
-                    if (char.IsDigit(arestas[i]) && ((arestas[i - 1] == '(') || (arestas[i - 1] == ',' && arestas[i + 1] == ',')))
-                        arestaCopia += int.Parse(arestas[i].ToString()) - 1; // Adiciona na aresta copiada os caracteres convertidos em números - 1 
-
-                    else
-                        arestaCopia += arestas[i]; // Adiciona sem conversão
-
-                arestas = arestaCopia;
+                Console.Write("Peso da aresta: ");
+                peso = int.Parse(Console.ReadLine());
             }
-            else
-            {
-                // Cria uma cópia das arestas com os vértices começando no zero
-                for (int i = 0; i < arestas.Length; i++)
-                    if (char.IsDigit(arestas[i]))
-                        arestaCopia += int.Parse(arestas[i].ToString()) - 1; // Adiciona na aresta copiada os caracteres convertidos em números - 1 
 
-                    else
-                        arestaCopia += arestas[i]; // Adiciona sem conversão
-
-                arestas = arestaCopia;
-            }
+            // Preenche matriz (grafo não direcionado)
+            matriz[v1, v2] = peso;
+            matriz[v2, v1] = peso;
         }
-
-        // Converte os vertices em números e adiciona cada aresta no grafo 
-        for (int i = 0; i < arestas.Length; i++)
-            if (arestas[i] == '(')
-            {
-                int vertice1, vertice2;
-
-                if (char.IsLetter(arestas[i + 1])) // Verifica se o primeiro vértice está escrito em letra
-                    vertice1 = char.ToUpper(arestas[i + 1]) - 'A'; // Converte o primeiro caractere letra dentro do parenteses em numero (A,B) => (0,B)
-                else
-                    vertice1 = arestas[i + 1];
-
-                if (char.IsLetter(arestas[i + 3])) // Verifica se o segundo vértice está escrito em letra
-                    vertice2 = char.ToUpper(arestas[i + 3]) - 'A'; // Converte o Segundo caractere letra dentro do parenteses em numero (0,B) => (0,1)
-                else
-                    vertice2 = arestas[i + 3];
-
-                grafo[vertice1, vertice2] = 1; // Adiciona uma aresta ligando os vértices 1 e 2
-
-                i += 5; // Avança o i para a proxima aresta
-            }
-    }
-    public int ValidaArestas(string arestas) // Verifica se a string de arestas é válida
-    {
-        //                             {  ((A-Z ou 0-9),(A-z ou 0-9),(0-9)  espaçadores ( ,:)    }                           )
-        if (Regex.IsMatch(arestas, @"^\{?\([A-Za-z0-9]+,[A-Za-z0-9]+(,[0-9]+)?\)([ ,;]+\([A-Za-z0-9]+,[A-Za-z0-9]+(,[0-9]+)?\))*\}?$"))
-        {
-            string[] matches = Regex.Matches(arestas, @"\(([0-9]+),([0-9]+)(,([0-9]+))?\)").Cast<Match>().Select(m => m.Value).ToArray();
-            foreach (string vertice in matches)
-                for (int i = 0; i < vertice.Length; i++)
-                    //       if (char.IsDigit(vertice[i]) || vertice[i])
-
-
-
-                    if (Regex.IsMatch(arestas, @"^\{? \([A-Za-z0-9]+,[A-Za-z0-9]+,[0-9]+       \)   \}?$"))
-                    { }
-        }
-        /*   try
-           {
-               string Edge;
-               bool ponderado = false, simples = false;
-
-               for (int i = 0; i < arestas.Length; i++)
-               {
-                   ponderado = false;
-                   simples = false;
-
-                   if (arestas[i] == '(') // Procura abertura do parenteses
-                   {
-                       Edge = "(";
-
-                       for (int j = i + 1; arestas[j - 1] != ')'; j++) // Copia uma aresta de toda a string 
-                       {
-                           Edge += arestas[j];
-                           i = j; // Atualiza o i para o final da aresta
-                       }
-
-                       if (Regex.IsMatch(Edge, @"^\([A-Za-z0-9],[A-Za-z0-9]\)$")) // Verifica se a aresta é simples e está escrita como: (A,B) ou (0,1) ou (0,B)
-                       {
-                           simples = true;
-                           ponderado = false;
-                       }
-                       else if (Regex.IsMatch(Edge, @"^\([A-Za-z0-9],[A-Za-z0-9],[0-9]+\)$")) // Verifica se a aresta é ponderada e está escrita como: (A,B,3) ou (0,1,3) ou (0,B,3)
-                       {
-                           ponderado = true;
-                           simples = false;
-                       }
-
-                   }
-
-               }
-               if (!simples && !ponderado)
-                   return -1;
-               r
-               }
-           catch
-           {
-               Console.WriteLine("\nArestas inválidas");
-               
-           }*/
-        return -1;
     }
     public void ListarGrafos(int GrafosPorPag = 6) // Lista todos os grafos em páginas
     {
@@ -646,10 +504,10 @@ class OperacoesGrafos
                     }
                     while (tecla.Key != ConsoleKey.Enter);
 
-                    if (!int.TryParse(escolha, out int pos) || pos >= ListaGrafos.Count || pos < 0) // Verifica se um numero foi digitado e se representa um grafo válido
+                    if (!int.TryParse(escolha, out int pos) || pos - 1 >= ListaGrafos.Count || pos - 1 < 0) // Verifica se um numero foi digitado e se representa um grafo válido
                         throw new Exception("\nValor inválido");
 
-                    return pos;
+                    return pos - 1;
                 }
                 else // Não é número de grafo
                 {
@@ -706,7 +564,7 @@ class OperacoesGrafos
                         Console.Write($"({j},{k})");
 
     }
-    public void ApagarGrafo()
+    public void ApagarGrafo() // Remove um grafo por seu índice
     {
         Console.Write("Número do grafo a ser apagado : ");
         if (int.TryParse(Console.ReadLine(), out int numGrafo) && numGrafo > 0 && numGrafo < ListaGrafos.Count)
@@ -726,7 +584,7 @@ class OperacoesGrafos
             Console.WriteLine("");
         }
     }
-    public void LimparGrafos()
+    public void LimparGrafos() // Remove todos os grafos
     {
         Console.WriteLine("\nREMOVENDO TODOS OS GRAFOS");
         Console.WriteLine("  Tem certeza?");
@@ -743,6 +601,7 @@ class OperacoesGrafos
             }
             Console.WriteLine("");
             Console.WriteLine("  Grafos removidos com sucesso");
+
             Console.ReadKey(true);
 
             ListaGrafos.Clear();
@@ -758,16 +617,6 @@ class OperacoesGrafos
             Console.WriteLine("");
         }
     }
-
-    public void LerGrafoArquivo() { }
-    /*
-                ALGORITMOS DO TRABALHO ABAIXO  
-
-                "GrafoNum" é o numero do algoritmo em "ListaGrafos" pode ser removido de varios jeitos como:   
-
-                int[,]Matriz = ListaGrafos[GrafoNum] 
-    */
-
     public void DFS(int GrafoNum)
     {
 
@@ -808,7 +657,53 @@ class OperacoesGrafos
     }
     public void BFS(int GrafoNum)
     {
-            
+        int[,] matriz = ListaGrafos[GrafoNum]; // Pegar uma matriz da lista
+
+        // Inicializa os vetores
+        bool[] visitado = new bool[matriz.GetLength(0)];
+        int[] dist = new int[matriz.GetLength(0)];
+        int[] pred = new int[matriz.GetLength(0)];
+        int i = 0;
+        Queue<int> fila = new();
+
+        for (int j = 0; j < matriz.GetLength(0); j++)
+        {
+            dist[j] = -1;
+            pred[j] = -1;
+        }
+        // Vértice 0 sendo inciado
+        visitado[0] = true;
+        dist[0] = i;
+        pred[0] = -1;
+        fila.Enqueue(0);
+
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("          Algoritmo - BFS           ");
+        Console.WriteLine("====================================");
+        Console.WriteLine(" Vértices | Distância | Predecessor");
+
+        while (fila.Count > 0) // Funciona enquanto não passou por todos os vértices
+        {
+            // Tira o vertice atual e escreve na tela
+            int vAtual = fila.Dequeue();
+            Console.WriteLine($" {vAtual,4}{dist[vAtual],11}{pred[vAtual],13}");
+
+            for (i = 0; i < matriz.GetLength(0); i++)// Percorre o grafo encontrando arestas
+            {
+                if (matriz[vAtual, i] >= 1 && !visitado[i]) // Aresta nova encontrada
+                {
+                    fila.Enqueue(i); // Coloca na fila
+                    // Salva o predecesessor e a distância da raiz
+                    dist[i] = dist[vAtual] + 1;
+                    pred[i] = vAtual;
+                    visitado[i] = true; // Marca como visitado
+                }
+            }
+        }
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
+        Console.ReadKey(true); // Para ler os resultados
     }
 
     public void Dijkstra(int GrafoNum)
@@ -821,6 +716,95 @@ class OperacoesGrafos
     }
     public void Kruskal(int GrafoNum)
     {
+        int[,] matriz = ListaGrafos[GrafoNum];
+        int n = matriz.GetLength(0);
 
+        // Lista para armazenar todas as arestas
+        List<(int origem, int destino, int peso)> arestas = new();
+
+        // Extrai todas as arestas da matriz de adjacência
+        for (int i = 0; i < n; i++)
+            for (int j = i + 1; j < n; j++) // j = i+1 para evitar duplicatas (grafo não direcionado)
+                if (matriz[i, j] > 0)
+                    arestas.Add((i, j, matriz[i, j]));
+
+        // Ordena as arestas por peso (ordem crescente)
+        arestas.Sort((a, b) => a.peso.CompareTo(b.peso));
+
+        int[] pai = new int[n];
+        int[] rank = new int[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            pai[i] = i;
+            rank[i] = 0;
+        }
+
+        // Lista para armazenar as arestas da árvore
+        List<(int origem, int destino, int peso)> agm = new();
+        int pesoTotal = 0;
+
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("        Algoritmo - Kruskal         ");
+        Console.WriteLine("====================================");
+        Console.WriteLine("     Aresta | Peso | Status");
+        Console.WriteLine("------------------------------------");
+
+        // Processa cada aresta em ordem crescente de peso
+        foreach (var aresta in arestas)
+        {
+            int raizOrigem = Encontrar(pai, aresta.origem);
+            int raizDestino = Encontrar(pai, aresta.destino);
+
+            Console.Write($"      ({aresta.origem},{aresta.destino})   {aresta.peso,4}   ");
+
+            // Raízes diferentes não formam ciclos
+            if (raizOrigem != raizDestino)
+            {
+                agm.Add(aresta);
+                pesoTotal += aresta.peso;
+                Juncao(pai, rank, raizOrigem, raizDestino);
+                Console.WriteLine("Aceita");
+            }
+            else
+                Console.WriteLine("Rejeitada (forma ciclo)");
+                Thread.Sleep(300); 
+        }
+
+        Console.WriteLine("====================================");
+        Console.WriteLine("  Árvore Geradora Mínima (AGM):");
+        Console.WriteLine("------------------------------------");
+
+        foreach (var aresta in agm)
+            Console.WriteLine($"     Aresta ({aresta.origem},{aresta.destino}) - Peso: {aresta.peso}");
+
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine($" Peso total da AGM: {pesoTotal}");
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
+
+        Console.ReadKey(true);
+    }
+    private int Encontrar(int[] pai, int i)
+    {
+        if (pai[i] != i)
+            pai[i] = Encontrar(pai, pai[i]);
+        return pai[i];
+    }
+    private void Juncao(int[] pai, int[] rank, int x, int y)
+    {
+        int raizX = Encontrar(pai, x);
+        int raizY = Encontrar(pai, y);
+
+        if (rank[raizX] < rank[raizY])
+            pai[raizX] = raizY;
+        else if (rank[raizX] > rank[raizY])
+            pai[raizY] = raizX;
+        else
+        {
+            pai[raizY] = raizX;
+            rank[raizX]++;
+        }
     }
 }
