@@ -269,7 +269,8 @@ class Menu
                 Console.WriteLine("    3 - Dijkstra               ");
                 Console.WriteLine("    4 - Prim                   ");
                 Console.WriteLine("    5 - Kruskal                ");
-                Console.WriteLine("    6 - Voltar\n               ");
+                Console.WriteLine("    6 - Voltar                 ");
+                Console.WriteLine("===============================\n");
                 Console.Write("   ");
 
                 if (int.TryParse(Console.ReadLine(), out opcao))
@@ -279,6 +280,7 @@ class Menu
                             operacoes.DFS(grafoNum);
                             break;
                         case 2:
+
                             operacoes.BFS(grafoNum);
                             break;
                         case 3:
@@ -783,17 +785,28 @@ class OperacoesGrafos
         int i = 0;
         Queue<int> fila = new();
 
+        for (int j = 0; j < matriz.GetLength(0); j++)
+        {
+            dist[j] = -1;
+            pred[j] = -1;
+        }
         // Vértice 0 sendo inciado
         visitado[0] = true;
         dist[0] = i;
         pred[0] = -1;
         fila.Enqueue(0);
 
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("          Algoritmo - BFS           ");
+        Console.WriteLine("====================================");
+        Console.WriteLine(" Vértices | Distância | Predecessor");
+
         while (fila.Count > 0) // Funciona enquanto não passou por todos os vértices
         {
             // Tira o vertice atual e escreve na tela
             int vAtual = fila.Dequeue();
-            Console.WriteLine($"({vAtual}) dist:{dist[vAtual]} pred:{pred[vAtual]}");
+            Console.WriteLine($" {vAtual,4}{dist[vAtual],11}{pred[vAtual],13}");
 
             for (i = 0; i < matriz.GetLength(0); i++)// Percorre o grafo encontrando arestas
             {
@@ -801,12 +814,14 @@ class OperacoesGrafos
                 {
                     fila.Enqueue(i); // Coloca na fila
                     // Salva o predecesessor e a distância da raiz
-                    dist[vAtual] = i + 1;
-                    pred[vAtual] = i - 1;
+                    dist[i] = dist[vAtual] + 1;
+                    pred[i] = vAtual;
                     visitado[i] = true; // Marca como visitado
                 }
             }
         }
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
         Console.ReadKey(true); // Para ler os resultados
     }
     public void Dijkstra(int GrafoNum)
