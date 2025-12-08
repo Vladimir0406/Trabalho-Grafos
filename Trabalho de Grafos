@@ -10,7 +10,6 @@ class Program
     {
         OperacoesGrafos operacoes = new();
 
-
         int[,] grafo = { { 0, 1 }, { 1, 0 } };
         int[,] grafo2 = { { 0, 7 }, { 7, 0 } };
         int[,] grafo3 = { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } };
@@ -32,7 +31,6 @@ class Program
         Menu Inicializador = new();
 
         Inicializador.MenuPrincipal(operacoes);
-
     }
 }
 class Menu
@@ -707,292 +705,292 @@ class OperacoesGrafos
     }
     public void Dijkstra(int GrafoNum)
     {
- int[,] matriz = ListaGrafos[GrafoNum];
-    int n = matriz.GetLength(0);
-    
-    Console.Clear();
-    Console.WriteLine("====================================");
-    Console.WriteLine("        Algoritmo - Dijkstra        ");
-    Console.WriteLine("====================================");
-    
-    // Pede o vértice de origem
-    Console.Write("Informe o vértice de origem (0 a " + (n - 1) + "): ");
-    int origem;
-    
-    while (!int.TryParse(Console.ReadLine(), out origem) || origem < 0 || origem >= n)
-    {
-        Console.Write("Vértice inválido. Digite um número entre 0 e " + (n - 1) + ": ");
+        int[,] matriz = ListaGrafos[GrafoNum];
+        int n = matriz.GetLength(0);
+
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("        Algoritmo - Dijkstra        ");
+        Console.WriteLine("====================================");
+
+        // Pede o vértice de origem
+        Console.Write("Informe o vértice de origem (0 a " + (n - 1) + "): ");
+        int origem;
+
+        while (!int.TryParse(Console.ReadLine(), out origem) || origem < 0 || origem >= n)
+        {
+            Console.Write("Vértice inválido. Digite um número entre 0 e " + (n - 1) + ": ");
+        }
+
+        // Arrays para armazenar distâncias, predecessores e se o vértice foi processado
+        int[] dist = new int[n];
+        int[] pai = new int[n];
+        bool[] processado = new bool[n];
+
+        // Inicializa todos os vértices
+        for (int i = 0; i < n; i++)
+        {
+            dist[i] = int.MaxValue;
+            pai[i] = -1;
+            processado[i] = false;
+        }
+
+        // Distância da origem para ela mesma é 0
+        dist[origem] = 0;
+
+        Console.WriteLine("\nPassos do algoritmo:");
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine(" Vértice | Distância | Predecessor | Status");
+        Console.WriteLine("------------------------------------");
+
+        // Processa todos os vértices
+        for (int count = 0; count < n - 1; count++)
+        {
+            // Encontra o vértice com menor distância não processado
+            int u = MenorDistancia(dist, processado, n);
+
+            // Marca como processado
+            processado[u] = true;
+
+            Console.WriteLine($" {u,7} | " +
+                             $"{(dist[u] == int.MaxValue ? "INF" : dist[u].ToString()),9} | " +
+                             $"{pai[u],10} | Processado");
+
+            // Atualiza as distâncias dos vértices adjacentes
+            for (int v = 0; v < n; v++)
+            {
+                // Se há uma aresta, v não foi processado, dist[u] não é infinito
+                // e a nova distância é menor que a atual
+                if (matriz[u, v] != 0 && !processado[v] && dist[u] != int.MaxValue &&
+                    dist[u] + matriz[u, v] < dist[v])
+                {
+                    dist[v] = dist[u] + matriz[u, v];
+                    pai[v] = u;
+                }
+            }
+
+            Thread.Sleep(400); // Pequena pausa para visualização
+        }
+
+        Console.WriteLine("====================================");
+        Console.WriteLine("  Resultados finais:");
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine(" Vértice | Distância | Predecessor | Caminho");
+        Console.WriteLine("------------------------------------");
+
+        // Mostra os resultados finais
+        for (int i = 0; i < n; i++)
+        {
+            string caminho = ObterCaminho(pai, i, origem);
+
+            Console.WriteLine($" {i,7} | " +
+                             $"{(dist[i] == int.MaxValue ? "INF" : dist[i].ToString()),9} | " +
+                             $"{pai[i],10} | {caminho}");
+        }
+
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
+        Console.ReadKey(true);
     }
-    
-    // Arrays para armazenar distâncias, predecessores e se o vértice foi processado
-    int[] dist = new int[n];
-    int[] pai = new int[n];
-    bool[] processado = new bool[n];
-    
-    // Inicializa todos os vértices
-    for (int i = 0; i < n; i++)
+
+    // Métodos auxiliares
+    private int MenorChave(int[] chave, bool[] naAGM, int n)
     {
-        dist[i] = int.MaxValue;
-        pai[i] = -1;
-        processado[i] = false;
-    }
-    
-    // Distância da origem para ela mesma é 0
-    dist[origem] = 0;
-    
-    Console.WriteLine("\nPassos do algoritmo:");
-    Console.WriteLine("------------------------------------");
-    Console.WriteLine(" Vértice | Distância | Predecessor | Status");
-    Console.WriteLine("------------------------------------");
-    
-    // Processa todos os vértices
-    for (int count = 0; count < n - 1; count++)
-    {
-        // Encontra o vértice com menor distância não processado
-        int u = MenorDistancia(dist, processado, n);
-        
-        // Marca como processado
-        processado[u] = true;
-        
-        Console.WriteLine($" {u,7} | " +
-                         $"{(dist[u] == int.MaxValue ? "INF" : dist[u].ToString()),9} | " +
-                         $"{pai[u],10} | Processado");
-        
-        // Atualiza as distâncias dos vértices adjacentes
+        int menor = int.MaxValue;
+        int indiceMenor = -1;
+
         for (int v = 0; v < n; v++)
         {
-            // Se há uma aresta, v não foi processado, dist[u] não é infinito
-            // e a nova distância é menor que a atual
-            if (matriz[u, v] != 0 && !processado[v] && dist[u] != int.MaxValue &&
-                dist[u] + matriz[u, v] < dist[v])
+            if (!naAGM[v] && chave[v] < menor)
             {
-                dist[v] = dist[u] + matriz[u, v];
-                pai[v] = u;
+                menor = chave[v];
+                indiceMenor = v;
             }
         }
-        
-        Thread.Sleep(400); // Pequena pausa para visualização
-    }
-    
-    Console.WriteLine("====================================");
-    Console.WriteLine("  Resultados finais:");
-    Console.WriteLine("------------------------------------");
-    Console.WriteLine(" Vértice | Distância | Predecessor | Caminho");
-    Console.WriteLine("------------------------------------");
-    
-    // Mostra os resultados finais
-    for (int i = 0; i < n; i++)
-    {
-        string caminho = ObterCaminho(pai, i, origem);
-        
-        Console.WriteLine($" {i,7} | " +
-                         $"{(dist[i] == int.MaxValue ? "INF" : dist[i].ToString()),9} | " +
-                         $"{pai[i],10} | {caminho}");
-    }
-    
-    Console.WriteLine("====================================");
-    Console.WriteLine("\nVoltar - Qualquer tecla");
-    Console.ReadKey(true);
-}
 
-// Métodos auxiliares
-private int MenorChave(int[] chave, bool[] naAGM, int n)
-{
-    int menor = int.MaxValue;
-    int indiceMenor = -1;
-    
-    for (int v = 0; v < n; v++)
-    {
-        if (!naAGM[v] && chave[v] < menor)
-        {
-            menor = chave[v];
-            indiceMenor = v;
-        }
+        return indiceMenor;
     }
-    
-    return indiceMenor;
-}
 
-private int MenorDistancia(int[] dist, bool[] processado, int n)
-{
-    int menor = int.MaxValue;
-    int indiceMenor = -1;
-    
-    for (int v = 0; v < n; v++)
+    private int MenorDistancia(int[] dist, bool[] processado, int n)
     {
-        if (!processado[v] && dist[v] <= menor)
-        {
-            menor = dist[v];
-            indiceMenor = v;
-        }
-    }
-    
-    return indiceMenor;
-}
+        int menor = int.MaxValue;
+        int indiceMenor = -1;
 
-private bool GrafoConexo(int[,] matriz)
-{
-    int n = matriz.GetLength(0);
-    bool[] visitado = new bool[n];
-    Stack<int> pilha = new Stack<int>();
-    
-    // Começa do vértice 0
-    pilha.Push(0);
-    
-    while (pilha.Count > 0)
-    {
-        int v = pilha.Pop();
-        
-        if (!visitado[v])
+        for (int v = 0; v < n; v++)
         {
-            visitado[v] = true;
-            
-            // Adiciona todos os vértices adjacentes não visitados
-            for (int i = 0; i < n; i++)
+            if (!processado[v] && dist[v] <= menor)
             {
-                if (matriz[v, i] != 0 && !visitado[i])
+                menor = dist[v];
+                indiceMenor = v;
+            }
+        }
+
+        return indiceMenor;
+    }
+
+    private bool GrafoConexo(int[,] matriz)
+    {
+        int n = matriz.GetLength(0);
+        bool[] visitado = new bool[n];
+        Stack<int> pilha = new Stack<int>();
+
+        // Começa do vértice 0
+        pilha.Push(0);
+
+        while (pilha.Count > 0)
+        {
+            int v = pilha.Pop();
+
+            if (!visitado[v])
+            {
+                visitado[v] = true;
+
+                // Adiciona todos os vértices adjacentes não visitados
+                for (int i = 0; i < n; i++)
                 {
-                    pilha.Push(i);
+                    if (matriz[v, i] != 0 && !visitado[i])
+                    {
+                        pilha.Push(i);
+                    }
                 }
             }
         }
-    }
-    
-    // Verifica se todos os vértices foram visitados
-    for (int i = 0; i < n; i++)
-    {
-        if (!visitado[i])
-        {
-            return false;
-        }
-    }
-    
-    return true;
-}
 
-private string ObterCaminho(int[] pai, int destino, int origem)
-{
-    if (pai[destino] == -1 && destino != origem)
-    {
-        return "Inalcançável";
-    }
-    
-    Stack<int> caminho = new Stack<int>();
-    int atual = destino;
-    
-    // Reconstrói o caminho do destino até a origem
-    while (atual != -1)
-    {
-        caminho.Push(atual);
-        atual = pai[atual];
-    }
-    
-    // Converte o caminho para string
-    string resultado = "";
-    while (caminho.Count > 0)
-    {
-        resultado += caminho.Pop().ToString();
-        if (caminho.Count > 0)
+        // Verifica se todos os vértices foram visitados
+        for (int i = 0; i < n; i++)
         {
-            resultado += " → ";
-        }
-    }
-    
-    return resultado;
-
-    }
-   public void Prim(int GrafoNum)
-{
-    int[,] matriz = ListaGrafos[GrafoNum];
-    int n = matriz.GetLength(0);
-    
-    // Verifica se o grafo é conexo
-    if (!GrafoConexo(matriz))
-    {
-        Console.WriteLine("Grafo não é conexo. Algoritmo de Prim requer grafo conexo.");
-        Console.WriteLine("\nVoltar - Qualquer tecla");
-        Console.ReadKey(true);
-        return;
-    }
-    
-    Console.Clear();
-    Console.WriteLine("====================================");
-    Console.WriteLine("          Algoritmo - Prim          ");
-    Console.WriteLine("====================================");
-    
-    // Arrays para armazenar as chaves, predecessores e se o vértice está na AGM
-    int[] chave = new int[n];
-    int[] pai = new int[n];
-    bool[] naAGM = new bool[n];
-    
-    // Inicializa todos os vértices
-    for (int i = 0; i < n; i++)
-    {
-        chave[i] = int.MaxValue;
-        naAGM[i] = false;
-    }
-    
-    // Começa pelo vértice 0
-    chave[0] = 0;
-    pai[0] = -1; // Primeiro vértice não tem predecessor
-    
-    int pesoTotal = 0;
-    
-    Console.WriteLine(" Passo | Vértice | Chave | Predecessor | Status");
-    Console.WriteLine("-----------------------------------------------");
-    
-    // Para cada vértice, encontra o de menor chave
-    for (int count = 0; count < n; count++)
-    {
-        // Encontra o vértice com menor chave que ainda não está na AGM
-        int u = MenorChave(chave, naAGM, n);
-        
-        // Adiciona à AGM
-        naAGM[u] = true;
-        
-        // Se não for o primeiro vértice, adiciona o peso
-        if (pai[u] != -1)
-        {
-            pesoTotal += matriz[u, pai[u]];
-        }
-        
-        // Mostra o passo atual
-        Console.WriteLine($" {count + 1,5} | {u,7} | " +
-                         $"{(chave[u] == int.MaxValue ? "INF" : chave[u].ToString()),5} | " +
-                         $"{pai[u],10} | Adicionado");
-        
-        // Atualiza as chaves dos vértices adjacentes
-        for (int v = 0; v < n; v++)
-        {
-            // Se há uma aresta entre u e v, v não está na AGM, e o peso é menor que a chave atual
-            if (matriz[u, v] != 0 && !naAGM[v] && matriz[u, v] < chave[v])
+            if (!visitado[i])
             {
-                pai[v] = u;
-                chave[v] = matriz[u, v];
+                return false;
             }
         }
-        
-        Thread.Sleep(500); // Pequena pausa para visualização
+
+        return true;
     }
-    
-    Console.WriteLine("====================================");
-    Console.WriteLine("  Árvore Geradora Mínima (AGM):");
-    Console.WriteLine("------------------------------------");
-    
-    for (int i = 1; i < n; i++)
+
+    private string ObterCaminho(int[] pai, int destino, int origem)
     {
-        if (pai[i] != -1)
+        if (pai[destino] == -1 && destino != origem)
         {
-            Console.WriteLine($"     Aresta ({pai[i]},{i}) - Peso: {matriz[i, pai[i]]}");
+            return "Inalcançável";
         }
+
+        Stack<int> caminho = new Stack<int>();
+        int atual = destino;
+
+        // Reconstrói o caminho do destino até a origem
+        while (atual != -1)
+        {
+            caminho.Push(atual);
+            atual = pai[atual];
+        }
+
+        // Converte o caminho para string
+        string resultado = "";
+        while (caminho.Count > 0)
+        {
+            resultado += caminho.Pop().ToString();
+            if (caminho.Count > 0)
+            {
+                resultado += " → ";
+            }
+        }
+
+        return resultado;
+
     }
-    
-    Console.WriteLine("------------------------------------");
-    Console.WriteLine($" Peso total da AGM: {pesoTotal}");
-    Console.WriteLine("====================================");
-    Console.WriteLine("\nVoltar - Qualquer tecla");
-    Console.ReadKey(true);
-}
+    public void Prim(int GrafoNum)
+    {
+        int[,] matriz = ListaGrafos[GrafoNum];
+        int n = matriz.GetLength(0);
+
+        // Verifica se o grafo é conexo
+        if (!GrafoConexo(matriz))
+        {
+            Console.WriteLine("Grafo não é conexo. Algoritmo de Prim requer grafo conexo.");
+            Console.WriteLine("\nVoltar - Qualquer tecla");
+            Console.ReadKey(true);
+            return;
+        }
+
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("          Algoritmo - Prim          ");
+        Console.WriteLine("====================================");
+
+        // Arrays para armazenar as chaves, predecessores e se o vértice está na AGM
+        int[] chave = new int[n];
+        int[] pai = new int[n];
+        bool[] naAGM = new bool[n];
+
+        // Inicializa todos os vértices
+        for (int i = 0; i < n; i++)
+        {
+            chave[i] = int.MaxValue;
+            naAGM[i] = false;
+        }
+
+        // Começa pelo vértice 0
+        chave[0] = 0;
+        pai[0] = -1; // Primeiro vértice não tem predecessor
+
+        int pesoTotal = 0;
+
+        Console.WriteLine(" Passo | Vértice | Chave | Predecessor | Status");
+        Console.WriteLine("-----------------------------------------------");
+
+        // Para cada vértice, encontra o de menor chave
+        for (int count = 0; count < n; count++)
+        {
+            // Encontra o vértice com menor chave que ainda não está na AGM
+            int u = MenorChave(chave, naAGM, n);
+
+            // Adiciona à AGM
+            naAGM[u] = true;
+
+            // Se não for o primeiro vértice, adiciona o peso
+            if (pai[u] != -1)
+            {
+                pesoTotal += matriz[u, pai[u]];
+            }
+
+            // Mostra o passo atual
+            Console.WriteLine($" {count + 1,5} | {u,7} | " +
+                             $"{(chave[u] == int.MaxValue ? "INF" : chave[u].ToString()),5} | " +
+                             $"{pai[u],10} | Adicionado");
+
+            // Atualiza as chaves dos vértices adjacentes
+            for (int v = 0; v < n; v++)
+            {
+                // Se há uma aresta entre u e v, v não está na AGM, e o peso é menor que a chave atual
+                if (matriz[u, v] != 0 && !naAGM[v] && matriz[u, v] < chave[v])
+                {
+                    pai[v] = u;
+                    chave[v] = matriz[u, v];
+                }
+            }
+
+            Thread.Sleep(500); // Pequena pausa para visualização
+        }
+
+        Console.WriteLine("====================================");
+        Console.WriteLine("  Árvore Geradora Mínima (AGM):");
+        Console.WriteLine("------------------------------------");
+
+        for (int i = 1; i < n; i++)
+        {
+            if (pai[i] != -1)
+            {
+                Console.WriteLine($"     Aresta ({pai[i]},{i}) - Peso: {matriz[i, pai[i]]}");
+            }
+        }
+
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine($" Peso total da AGM: {pesoTotal}");
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
+        Console.ReadKey(true);
+    }
     public void Kruskal(int GrafoNum)
     {
         int[,] matriz = ListaGrafos[GrafoNum];
