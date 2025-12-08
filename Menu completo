@@ -1,0 +1,237 @@
+class Menu
+{
+    public void MenuPrincipal(OperacoesGrafos operacoes) // Menu que controla o fluxo do programa entre criar grafos e usar algoritmos
+    {
+        int opcao = 0;
+
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine("        TRABALHO GRAFOS        ");
+            Console.WriteLine("===============================");
+            Console.WriteLine("    1 - Manipular Grafos       ");
+            Console.WriteLine("    2 - Ultilizar Algoritmos   ");
+            Console.WriteLine("    3 - Finalizar programa     ");
+            Console.WriteLine("===============================\n");
+            Console.Write("   ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao)) // Filtro para receber apenas int
+                switch (opcao)
+                {
+                    case 1:
+                        MenuGrafos(operacoes);
+                        break;
+                    case 2:
+                        MenuAlgoritmos(operacoes);
+                        break;
+                    case 3:
+                        MensagemAnimada("\nFinalizando programa", 500);
+                        break;
+                    default:
+                        MensagemAnimada("\nOpção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("\nOpção inválida");
+
+        } while (opcao != 3);
+    }
+    public void MenuGrafos(OperacoesGrafos operacoes) // Menu para realizar o CRUD com grafos
+    {
+        int opcao = 0;
+
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine("     Manipulação de Grafos     ");
+            Console.WriteLine("===============================\n");
+            Console.WriteLine("    1 - Criar Grafos           ");
+            Console.WriteLine("    2 - Apagar Grafos          ");
+            Console.WriteLine("    3 - Listar Grafos          ");
+            Console.WriteLine("    4 - Voltar\n               ");
+            Console.WriteLine("===============================\n");
+            Console.Write("   ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        MenuCriarGrafo(operacoes);
+                        break;
+                    case 2:
+                        MenuApagarGrafo(operacoes);
+                        break;
+                    case 3:
+                        operacoes.ListarGrafos();
+                        break;
+                    case 4:
+                        MensagemAnimada("\nvoltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("\nOpção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("\nOpção inválida");
+        } while (opcao != 4);
+    }
+    public void MenuCriarGrafo(OperacoesGrafos operacoes) // Menu para inserção de grafos
+    {
+        int opcao = 0;
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine($"      Criação de Grafos ({operacoes.ListaGrafos.Count})");
+            Console.WriteLine("===============================\n");
+            Console.WriteLine("    1 - Digitar                ");
+            Console.WriteLine("    2 - Voltar\n               ");
+            Console.WriteLine("===============================\n");
+            Console.Write("   ");
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        operacoes.LerGrafo();
+                        break;
+                    case 2:
+                        MensagemAnimada("\nvoltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("\nOpção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("\nOpção inválida");
+
+        } while (opcao != 2);
+    }
+    public void MenuApagarGrafo(OperacoesGrafos operacoes) // Menu para remoção de grafos
+    {
+        int opcao = 0;
+        do
+        {
+            Console.Clear();
+
+            Console.WriteLine("===============================");
+            Console.WriteLine("       Remoção de Grafos       ");
+            Console.WriteLine("===============================\n");
+            Console.WriteLine("    1 - Apagar grafo           ");
+            Console.WriteLine("    2 - Apagar todos           ");
+            Console.WriteLine("    3 - Voltar\n               ");
+            Console.WriteLine("===============================\n");
+            Console.Write("   ");
+
+            if (operacoes.ListaGrafos.Count <= 0)
+            {
+                Console.WriteLine("Não há grafos a serem removidos.");
+                Console.ReadKey(true);
+                break;
+            }
+
+            if (int.TryParse(Console.ReadLine(), out opcao))
+                switch (opcao)
+                {
+                    case 1:
+                        operacoes.ApagarGrafo();
+                        break;
+                    case 2:
+                        operacoes.LimparGrafos();
+                        break;
+                    case 3:
+                        MensagemAnimada("\nvoltando.", 250);
+                        break;
+                    default:
+                        MensagemAnimada("\nOpção inexistente");
+                        break;
+                }
+            else
+                MensagemAnimada("\nOpção inválida");
+        } while (opcao != 3);
+    }
+    public void MenuAlgoritmos(OperacoesGrafos operacoes) // Menu para aplicação de algoritmos em grafos
+    {
+        if (operacoes.ListaGrafos.Count <= 0) // Verifica se há grafos antes da execução do código
+        {
+            Console.WriteLine("\nNão há grafos para aplicar algoritmos.");
+            Console.ReadKey(true);
+        }
+        else
+        {
+            int opcao = 0;
+
+            while (true)
+            {
+                Console.Clear();
+
+                int grafoNum = operacoes.EscolherGrafo();
+
+                if (grafoNum == -1)
+                    break;
+
+                Console.Clear();
+
+                Console.WriteLine("===============================");
+                Console.WriteLine("    Aplicação de Algoritmos    ");
+                Console.WriteLine("===============================");
+                Console.WriteLine($" Grafo {grafoNum + 1} :");
+
+                operacoes.ListarGrafo(grafoNum);
+
+                Console.WriteLine("\n===============================");
+                Console.WriteLine(" Algoritmos :");
+                Console.WriteLine("    1 - DFS                    ");
+                Console.WriteLine("    2 - BFS                    ");
+                Console.WriteLine("    3 - Dijkstra               ");
+                Console.WriteLine("    4 - Prim                   ");
+                Console.WriteLine("    5 - Kruskal                ");
+                Console.WriteLine("    6 - Voltar                 ");
+                Console.WriteLine("===============================\n");
+                Console.Write("   ");
+
+                if (int.TryParse(Console.ReadLine(), out opcao))
+                    switch (opcao)
+                    {
+                        case 1:
+                            operacoes.DFS(grafoNum);
+                            break;
+                        case 2:
+                            operacoes.BFS(grafoNum);
+                            break;
+                        case 3:
+                            operacoes.Dijkstra(grafoNum);
+                            break;
+                        case 4:
+                            operacoes.Prim(grafoNum);
+                            break;
+                        case 5:
+                            operacoes.Kruskal(grafoNum);
+                            break;
+                        case 6:
+                            break;
+                        default:
+                            MensagemAnimada("\nOpção inexistente");
+                            break;
+                    }
+                else
+                    MensagemAnimada("\nOpção inválida");
+            }
+        }
+    }
+    private void MensagemAnimada(string Mensagem, int tempo = 300, int pontos = 4)
+    {
+        Console.Write(Mensagem);
+        for (int i = 0; i < pontos; i++)
+        {
+            Thread.Sleep(tempo);
+            Console.Write(".");
+        }
+        Console.WriteLine("");
+    }
+}
