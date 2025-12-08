@@ -1,0 +1,365 @@
+
+class OperacoesGrafos
+{
+    public List<int[,]> ListaGrafos = new();
+    public void LerGrafo()
+    {
+        int[,] grafo;
+
+        while (true)
+        {
+            try
+            {
+                Console.Clear();
+
+                Console.WriteLine("===============================");
+                Console.WriteLine("       Leitura de Grafos       ");
+                Console.WriteLine("===============================\n");
+
+                Console.Write("Número de vértices : ");
+
+                if (!(int.TryParse(Console.ReadLine(), out int n) || n <= 0)) // Verifica se o vértice é inválido
+                    throw new Exception("\nValor de vértice inválido");
+
+                grafo = new int[n, n];
+
+                LerArestas(grafo);
+
+                ListaGrafos.Add(grafo);
+
+                Console.WriteLine("\nGrafo adicionado com sucesso.");
+                Console.WriteLine("===============================");
+
+
+            }
+            catch (Exception ex) // Escreve a mensagem de erro
+            {
+                Console.Write(ex.Message);
+                for (int i = 0; i < 4; i++)
+                {
+                    Thread.Sleep(300);
+                    Console.Write(".");
+                }
+                Console.WriteLine("");
+            }
+            break;
+        }
+    }
+    public void LerArestas(int[,] matriz) // Lê cada dado para uma parte do grafo
+    {
+        int n = matriz.GetLength(0);
+
+        Console.WriteLine("O grafo é ponderado? (S/N)");
+        string opcao = Console.ReadLine().ToUpper();
+        bool ponderado = opcao == "S";
+
+        Console.WriteLine("Quantas arestas deseja inserir?");
+        int numArestas = int.Parse(Console.ReadLine());
+
+        for (int i = 0; i < numArestas; i++)
+        {
+            Console.WriteLine($"Aresta {i + 1}:");
+
+            Console.Write("Vértice 1: ");
+            int v1 = int.Parse(Console.ReadLine());
+
+            Console.Write("Vértice 2: ");
+            int v2 = int.Parse(Console.ReadLine());
+
+            int peso = 1; // padrão se não ponderado
+
+            if (ponderado)
+            {
+                Console.Write("Peso da aresta: ");
+                peso = int.Parse(Console.ReadLine());
+            }
+
+            // Preenche matriz (grafo não direcionado)
+            matriz[v1, v2] = peso;
+            matriz[v2, v1] = peso;
+        }
+    }
+    public void ListarGrafos(int GrafosPorPag = 6) // Lista todos os grafos em páginas
+    {
+        if (ListaGrafos.Count <= 0)
+        {
+            Console.WriteLine("\nNão há grafos a serem listados.");
+            Console.ReadKey(true);
+        }
+        else
+        {
+            int numPags = (int)Math.Ceiling((double)ListaGrafos.Count / GrafosPorPag); // Atribui o numero de paginas dividindo a quantidade de grafos total por grafos por pag, arrendondada pra cima
+            int i = 0;
+            while (true)
+            {
+                try
+                {
+                    Console.Clear();
+
+                    Console.WriteLine("=================================");
+                    Console.WriteLine($"       Lista de Grafos ({ListaGrafos.Count})");
+                    Console.WriteLine("=================================");
+                    Console.WriteLine($"  Página {i + 1}/{numPags}");
+
+                    // Listagem da quantidade máxima de gafos suportados por página
+                    for (int j = i * GrafosPorPag; j < (i + 1) * GrafosPorPag && j < ListaGrafos.Count; j++) // incia o j na posição do primeiro grafo da página e segue até o final da página ou ultimo da lista
+                    {
+                        Console.WriteLine("-------------------------------");
+                        Console.WriteLine($" Grafo {j + 1}");
+                        ListarGrafo(j);
+                        Thread.Sleep(10);
+                        Console.WriteLine("");
+                    }
+                    Console.WriteLine("=================================");
+
+                    // Opções dinâmicas 
+                    if (i <= 0) // Primeira página
+                    {
+                        Console.WriteLine("                 ---Próxima-->");
+                        Console.WriteLine("                  (D ou seta) ");
+                    }
+                    else if (i < numPags - 1) // Paginas do meio
+                    {
+                        Console.WriteLine("<--Anterior---   ---Próxima-->");
+                        Console.WriteLine(" (A ou seta)      (D ou seta) ");
+                    }
+                    else // Ultima página 
+                    {
+                        Console.WriteLine("<--Anterior---");
+                        Console.WriteLine(" (A ou seta)  ");
+                    }
+                    Console.WriteLine("            Voltar            ");
+                    Console.WriteLine("             (ESC)            ");
+
+                    ConsoleKeyInfo tecla = Console.ReadKey(true);
+
+                    // Movimenta as páginas pelas teclas apertadas
+                    if (tecla.Key == ConsoleKey.D || tecla.Key == ConsoleKey.RightArrow)
+                    {
+                        if (i < numPags - 1)
+                            i++;
+                        else
+                        {
+                            Console.Write("\n  Não há próxima página\n");
+                            Console.ReadKey(true);
+                        }
+                    }
+                    else if (tecla.Key == ConsoleKey.A || tecla.Key == ConsoleKey.LeftArrow)
+                        if (i > 0)
+                            i--;
+                        else
+                        {
+                            Console.Write("\n  Não há página anterior\n");
+                            Console.ReadKey(true);
+                        }
+                    else if (tecla.Key == ConsoleKey.Escape)
+                        break;
+                    else
+                        throw new Exception("\nTecla inválida");
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex.Message);
+                    for (int k = 0; k < 4; k++)
+                    {
+                        Thread.Sleep(300);
+                        Console.Write(".");
+                    }
+                    Console.WriteLine("");
+                }
+            }
+        }
+    }
+    public int EscolherGrafo(int GrafosPorPag = 5) // Lista todos os grafos para a escolha de aplicação de um algoritmo
+    {
+        int numPags = (int)Math.Ceiling((double)ListaGrafos.Count / GrafosPorPag); // Atribui o numero de paginas dividindo a quantidade de grafos total por grafos por pag, arrendondada pra cima
+        int i = 0;
+        while (true)
+        {
+            try
+            {
+                Console.Clear();
+
+                Console.WriteLine("=================================");
+                Console.WriteLine("        Seleção de Grafo         ");
+                Console.WriteLine("=================================");
+                Console.WriteLine($"  Página {i + 1}/{numPags}");
+
+                // Listagem da quantidade máxima de gafos suportados por página
+                for (int j = i * GrafosPorPag; j < (i + 1) * GrafosPorPag && j < ListaGrafos.Count; j++) // incia o j na posição do primeiro grafo da página e segue até o final da página ou ultimo da lista
+                {
+                    Console.WriteLine("-------------------------------");
+                    Console.WriteLine($" Grafo {j + 1}");
+                    ListarGrafo(j);
+                    Thread.Sleep(10);
+                    Console.WriteLine("");
+                }
+                Console.WriteLine("=================================");
+
+                // Opções dinâmicas 
+                if (i <= 0) // Primeira página
+                {
+                    Console.WriteLine("                 ---Próxima-->");
+                    Console.WriteLine("                  (D ou seta) ");
+                }
+                else if (i < numPags - 1) // Paginas do meio
+                {
+                    Console.WriteLine("<--Anterior---   ---Próxima-->");
+                    Console.WriteLine(" (A ou seta)      (D ou seta) ");
+                }
+                else // Ultima página 
+                {
+                    Console.WriteLine("<--Anterior---");
+                    Console.WriteLine(" (A ou seta)  ");
+                }
+                Console.WriteLine("            Voltar            ");
+                Console.WriteLine("             (ESC)            ");
+                Console.WriteLine("=================================");
+
+                Console.Write("\nNúmero do grafo : ");
+
+                ConsoleKeyInfo tecla = Console.ReadKey(true);
+
+                if (char.IsDigit(tecla.KeyChar)) // Verifica se a tecla pressionada é int 
+                {
+                    string escolha = tecla.KeyChar.ToString(); // Coloca o numero pressionado em string
+                    do
+                    {
+                        Console.Write(tecla.KeyChar);
+                        tecla = Console.ReadKey(true);
+                        escolha += tecla.KeyChar; // Adiciona as teclas pressionadas em uma string
+                    }
+                    while (tecla.Key != ConsoleKey.Enter);
+
+                    if (!int.TryParse(escolha, out int pos) || pos - 1 >= ListaGrafos.Count || pos - 1 < 0) // Verifica se um numero foi digitado e se representa um grafo válido
+                        throw new Exception("\nValor inválido");
+
+                    return pos - 1;
+                }
+                else // Não é número de grafo
+                {
+                    if (tecla.Key == ConsoleKey.D || tecla.Key == ConsoleKey.RightArrow)
+                    {
+                        if (i < numPags - 1)
+                            i++;
+                        else
+                        {
+                            Console.Write("\n  Não há próxima página\n");
+                            Console.ReadKey(true);
+                        }
+                    }
+                    else if (tecla.Key == ConsoleKey.A || tecla.Key == ConsoleKey.LeftArrow)
+                        if (i > 0)
+                            i--;
+                        else
+                        {
+                            Console.WriteLine("\n  Não há página anterior");
+                            Console.ReadKey(true);
+                        }
+                    else if (tecla.Key == ConsoleKey.Escape)
+                        break;
+                    else
+                        throw new Exception("\nTecla inválida");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                for (int k = 0; k < 4; k++)
+                {
+                    Thread.Sleep(300);
+                    Console.Write(".");
+                }
+                Console.WriteLine("");
+            }
+        }
+        return -1;
+    }
+    public void ListarGrafo(int NumGrafo) // Lista as propriedades de um grado
+    {
+        int[,] grafo = ListaGrafos[NumGrafo];
+
+        Console.WriteLine($"  Número de vértices : {grafo.GetLength(0)}");
+        Console.Write("  Arestas : ");
+
+        for (int j = 0; j < grafo.GetLength(0); j++) // Linhas
+            for (int k = 0; k < grafo.GetLength(0); k++) // Colunas
+                if (grafo[j, k] != 0) // Existe aresta
+                    if (grafo[j, k] > 1) // Grafo ponderado
+                        Console.Write($"({j},{k},{grafo[j, k]})");
+                    else // Grafo não ponderado
+                        Console.Write($"({j},{k})");
+
+    }
+    public void ApagarGrafo() // Remove um grafo por seu índice
+    {
+        Console.Write("Número do grafo a ser apagado : ");
+        if (int.TryParse(Console.ReadLine(), out int numGrafo) && numGrafo > 0 && numGrafo < ListaGrafos.Count)
+        {
+            ListaGrafos.RemoveAt(numGrafo);
+            Console.WriteLine("\nGrafo removido com sucesso.");
+            Console.ReadKey(true);
+        }
+        else
+        {
+            Console.Write("\nValor inválido");
+            for (int k = 0; k < 4; k++)
+            {
+                Thread.Sleep(300);
+                Console.Write(".");
+            }
+            Console.WriteLine("");
+        }
+    }
+    public void LimparGrafos() // Remove todos os grafos
+    {
+        Console.WriteLine("\nREMOVENDO TODOS OS GRAFOS");
+        Console.WriteLine("  Tem certeza?");
+        Console.WriteLine("  (Enter confirma)");
+        Console.WriteLine("  (Qualquer tecla para cancelar)");
+
+        if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+        {
+            Console.Write("\nRemovendo todos.");
+            for (int k = 0; k < 4; k++)
+            {
+                Thread.Sleep(300);
+                Console.Write(".");
+            }
+            Console.WriteLine("");
+            Console.WriteLine("  Grafos removidos com sucesso");
+
+            Console.ReadKey(true);
+
+            ListaGrafos.Clear();
+        }
+        else
+        {
+            Console.Write("Remoção cancelada.");
+            for (int k = 0; k < 4; k++)
+            {
+                Thread.Sleep(200);
+                Console.Write(".");
+            }
+            Console.WriteLine("");
+        }
+    }
+    public void DFS(int GrafoNum)
+    {
+    }
+    public void BFS(int GrafoNum)
+    {
+    }
+    public void Dijkstra(int GrafoNum)
+    {
+    }
+    }
+    public void Prim(int GrafoNum)
+    {
+    }
+    public void Kruskal(int GrafoNum)
+    {
+    }
+    }
+
+}
