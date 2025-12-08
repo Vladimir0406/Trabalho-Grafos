@@ -1,0 +1,93 @@
+ public void Kruskal(int GrafoNum)
+    {
+        int[,] matriz = ListaGrafos[GrafoNum];
+        int n = matriz.GetLength(0);
+
+        // Lista para armazenar todas as arestas
+        List<(int origem, int destino, int peso)> arestas = new();
+
+        // Extrai todas as arestas da matriz de adjacência
+        for (int i = 0; i < n; i++)
+            for (int j = i + 1; j < n; j++) // j = i+1 para evitar duplicatas (grafo não direcionado)
+                if (matriz[i, j] > 0)
+                    arestas.Add((i, j, matriz[i, j]));
+
+        // Ordena as arestas por peso (ordem crescente)
+        arestas.Sort((a, b) => a.peso.CompareTo(b.peso));
+
+        int[] pai = new int[n];
+        int[] rank = new int[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            pai[i] = i;
+            rank[i] = 0;
+        }
+
+        // Lista para armazenar as arestas da árvore
+        List<(int origem, int destino, int peso)> agm = new();
+        int pesoTotal = 0;
+
+        Console.Clear();
+        Console.WriteLine("====================================");
+        Console.WriteLine("        Algoritmo - Kruskal         ");
+        Console.WriteLine("====================================");
+        Console.WriteLine("     Aresta | Peso | Status");
+        Console.WriteLine("------------------------------------");
+
+        // Processa cada aresta em ordem crescente de peso
+        foreach (var aresta in arestas)
+        {
+            int raizOrigem = Encontrar(pai, aresta.origem);
+            int raizDestino = Encontrar(pai, aresta.destino);
+
+            Console.Write($"      ({aresta.origem},{aresta.destino})   {aresta.peso,4}   ");
+
+            // Raízes diferentes não formam ciclos
+            if (raizOrigem != raizDestino)
+            {
+                agm.Add(aresta);
+                pesoTotal += aresta.peso;
+                Juncao(pai, rank, raizOrigem, raizDestino);
+                Console.WriteLine("Aceita");
+            }
+            else
+                Console.WriteLine("Rejeitada (forma ciclo)");
+            Thread.Sleep(300);
+        }
+
+        Console.WriteLine("====================================");
+        Console.WriteLine("  Árvore Geradora Mínima (AGM):");
+        Console.WriteLine("------------------------------------");
+
+        foreach (var aresta in agm)
+            Console.WriteLine($"     Aresta ({aresta.origem},{aresta.destino}) - Peso: {aresta.peso}");
+
+        Console.WriteLine("------------------------------------");
+        Console.WriteLine($" Peso total da AGM: {pesoTotal}");
+        Console.WriteLine("====================================");
+        Console.WriteLine("\nVoltar - Qualquer tecla");
+
+        Console.ReadKey(true);
+    }
+    private int Encontrar(int[] pai, int i)
+    {
+        if (pai[i] != i)
+            pai[i] = Encontrar(pai, pai[i]);
+        return pai[i];
+    }
+    private void Juncao(int[] pai, int[] rank, int x, int y)
+    {
+        int raizX = Encontrar(pai, x);
+        int raizY = Encontrar(pai, y);
+
+        if (rank[raizX] < rank[raizY])
+            pai[raizX] = raizY;
+        else if (rank[raizX] > rank[raizY])
+            pai[raizY] = raizX;
+        else
+        {
+            pai[raizY] = raizX;
+            rank[raizX]++;
+        }
+    }
