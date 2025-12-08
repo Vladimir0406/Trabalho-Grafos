@@ -1,0 +1,15 @@
+/home/p1nk/Trabalho-Grafos/Menu-Completo/bin/Debug/net9.0/Menu-Completo
+/home/p1nk/Trabalho-Grafos/Menu-Completo/bin/Debug/net9.0/Menu-Completo.deps.json
+/home/p1nk/Trabalho-Grafos/Menu-Completo/bin/Debug/net9.0/Menu-Completo.runtimeconfig.json
+/home/p1nk/Trabalho-Grafos/Menu-Completo/bin/Debug/net9.0/Menu-Completo.dll
+/home/p1nk/Trabalho-Grafos/Menu-Completo/bin/Debug/net9.0/Menu-Completo.pdb
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.GeneratedMSBuildEditorConfig.editorconfig
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.AssemblyInfoInputs.cache
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.AssemblyInfo.cs
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.csproj.CoreCompileInputs.cache
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.sourcelink.json
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.dll
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/refint/Menu-Completo.dll
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.pdb
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/Menu-Completo.genruntimeconfig.cache
+/home/p1nk/Trabalho-Grafos/Menu-Completo/obj/Debug/net9.0/ref/Menu-Completo.dll
